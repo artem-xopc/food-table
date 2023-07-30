@@ -1,4 +1,10 @@
-# Getting Started with Create React App
+# Проект, реализованный с помощью React.js + AntD.
+
+#### Проект обладает только frontend частью, что позволяет сохранять с помощью useState хука введённые в специальном модальном окне данные и выводить их в качестве элементов таблицы.
+
+#### Ссылка на проект: [Food]()
+
+<!-- # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -67,4 +73,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) -->
