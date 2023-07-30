@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/food-table/static/css/main.1acdb721.css",
+    "main.js": "/food-table/static/js/main.db7dfb0c.js",
+    "static/js/787.bde40670.chunk.js": "/food-table/static/js/787.bde40670.chunk.js",
+    "index.html": "/food-table/index.html",
+    "main.1acdb721.css.map": "/food-table/static/css/main.1acdb721.css.map",
+    "main.db7dfb0c.js.map": "/food-table/static/js/main.db7dfb0c.js.map",
+    "787.bde40670.chunk.js.map": "/food-table/static/js/787.bde40670.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1acdb721.css",
+    "static/js/main.db7dfb0c.js"
+  ]
+}
