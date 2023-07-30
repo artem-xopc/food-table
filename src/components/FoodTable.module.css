@@ -1,0 +1,14 @@
+.table_wrapper {
+  padding: 50px;
+}
+.search_box {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-bottom: 36px;
+}
+.search {
+  /* 
+  margin-left: 36px; */
+  max-width: 500px;
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Input, DatePicker, InputNumber } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import styles from './FoodTable.module.css';
 
 const FoodTable = () => {
   const [form] = Form.useForm();
@@ -8,13 +9,12 @@ const FoodTable = () => {
   const [foodDate, setDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const columns = [
     {
       title: 'Дата',
       dataIndex: 'date',
-      sorter: (a, b) => a.date - b.date,
+      sorter: (a, b) => a.date.localeCompare(b.date),
       width: '20%',
     },
     {
@@ -43,7 +43,7 @@ const FoodTable = () => {
       filterMode: 'tree',
       filterSearch: true,
       onFilter: (value, record) => record.food_taking.includes(value),
-      width: '20%',
+      width: '10%',
     },
     {
       title: 'Калорийность',
@@ -57,7 +57,12 @@ const FoodTable = () => {
       width: '20%',
       render: (_, record) => (
         <>
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => {
+              handleEdit(record);
+            }}
+          />
           <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
         </>
       ),
@@ -116,7 +121,7 @@ const FoodTable = () => {
         setEditingRecord(null);
       } else {
         const newRecord = {
-          key: Date.now(),
+          key: data.length + 1,
           ...values,
         };
         setData([newRecord, ...data]);
@@ -140,32 +145,31 @@ const FoodTable = () => {
           typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(value.toLowerCase()),
       );
     });
-    setData([searchData, ...data]);
-  };
-
-  const handleDateChange = (date) => {
-    getUserDate(date);
-    // setSelectedDate(date);
+    if (searchData.length !== 0) {
+      setData([...searchData, ...data]);
+    } else {
+      return <div>Блюдо не обнаружено</div>;
+    }
   };
   return (
-    <>
-      <Input.Search placeholder="Поиск..." style={{ marginBottom: 16 }} onSearch={handleSearch} />
-      <div style={{ marginBottom: 16 }}>
+    <div className={styles.table_wrapper}>
+      <div className={styles.search_box}>
         <Button type="default" onClick={handleAdd}>
-          Добавить
+          Добавить запись
         </Button>
+        <Input.Search
+          placeholder="Найти в таблице"
+          onSearch={handleSearch}
+          className={styles.search}
+        />
       </div>
-
-      <div style={{ color: '#fff' }}>{foodDate}</div>
 
       <Table columns={columns} dataSource={data} pagination={false} size="small" />
 
       <Modal
         title={editingRecord ? 'Редактирование записи' : 'Добавление записи'}
         open={modalVisible}
-        onOk={() => {
-          handleSave();
-        }}
+        onOk={handleSave}
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
@@ -188,11 +192,7 @@ const FoodTable = () => {
             label="Дата"
             rules={[{ required: true, message: 'Выберите дату' }]}
           >
-            {/* <Input
-              placeholder="Введите дату ( ГГГГ/ММ/ДД )"
-              // onChange={(e) => getUserDate(e.target.value)}
-            /> */}
-            <DatePicker onChange={getUserDate} value={foodDate} />
+            <Input placeholder="Введите дату" onChange={(e) => getUserDate(e.target.value)} />
           </Form.Item>
           <Form.Item
             name="value"
@@ -206,7 +206,7 @@ const FoodTable = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </div>
   );
 };
 
