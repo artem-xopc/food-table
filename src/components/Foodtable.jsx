@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, InputNumber } from 'antd';
+import { Table, Button, Modal, Form, Input, DatePicker, InputNumber, Select } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import styles from './FoodTable.module.css';
 
 const FoodTable = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
   const [foodDate, setDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
@@ -15,13 +16,12 @@ const FoodTable = () => {
       title: 'Дата',
       dataIndex: 'date',
       sorter: (a, b) => a.date.localeCompare(b.date),
-      width: '20%',
+      width: '15%',
     },
     {
       title: 'Блюдо',
       dataIndex: 'dish',
       sorter: (a, b) => a.dish.localeCompare(b.dish),
-      width: '20%',
     },
     {
       title: 'Приём пищи',
@@ -32,12 +32,24 @@ const FoodTable = () => {
           value: 'Завтрак',
         },
         {
+          text: 'Второй завтрак',
+          value: 'Второй завтрак',
+        },
+        {
           text: 'Обед',
           value: 'Обед',
         },
         {
+          text: 'Полдник',
+          value: 'Полдник',
+        },
+        {
           text: 'Ужин',
           value: 'Ужин',
+        },
+        {
+          text: 'Перекус',
+          value: 'Перекус',
         },
       ],
       filterMode: 'tree',
@@ -54,15 +66,10 @@ const FoodTable = () => {
     {
       title: 'Редактировать таблицу',
       dataIndex: 'actions',
-      width: '20%',
+      width: '10%',
       render: (_, record) => (
         <>
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => {
-              handleEdit(record);
-            }}
-          />
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
         </>
       ),
@@ -85,6 +92,9 @@ const FoodTable = () => {
   const handleDelete = (key) => {
     const newData = data.filter((record) => record.key !== key);
     setData(newData);
+  };
+  const handleSearchDelete = () => {
+    setSearchData([]);
   };
 
   // Блок функций для управления форматом даты
@@ -138,19 +148,16 @@ const FoodTable = () => {
 
   // Поиск по таблице
   const handleSearch = (value) => {
-    const searchData = data.filter((record) => {
+    const resultSearchData = data.filter((record) => {
       // Проверяем наличие значения во всех полях записи
       return Object.values(record).some(
         (fieldValue) =>
           typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(value.toLowerCase()),
       );
     });
-    if (searchData.length !== 0) {
-      setData([...searchData, ...data]);
-    } else {
-      return <div>Блюдо не обнаружено</div>;
-    }
+    setSearchData(resultSearchData);
   };
+
   return (
     <div className={styles.table_wrapper}>
       <div className={styles.search_box}>
@@ -164,6 +171,16 @@ const FoodTable = () => {
         />
       </div>
 
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          {searchData.length !== 0 && (
+            <Button onClick={handleSearchDelete}>Удалить результат поиска</Button>
+          )}
+        </div>
+        {searchData.length !== 0 && (
+          <Table columns={columns} dataSource={searchData} pagination={false} size="small" />
+        )}
+      </div>
       <Table columns={columns} dataSource={data} pagination={false} size="small" />
 
       <Modal
@@ -185,7 +202,35 @@ const FoodTable = () => {
             label="Приём пищи"
             rules={[{ required: true, message: 'Введите приём пищи (завтрак/обед/ужин)' }]}
           >
-            <Input />
+            <Select
+              style={{ width: 170 }}
+              options={[
+                {
+                  value: 'Завтрак',
+                  label: 'Завтрак',
+                },
+                {
+                  value: 'Второй завтрак',
+                  label: 'Второй завтрак',
+                },
+                {
+                  value: 'Обед',
+                  label: 'Обед',
+                },
+                {
+                  value: 'Полдник',
+                  label: 'Полдник',
+                },
+                {
+                  value: 'Ужин',
+                  label: 'Ужин',
+                },
+                {
+                  value: 'Перекус',
+                  label: 'Перекус',
+                },
+              ]}
+            />
           </Form.Item>
           <Form.Item
             name="date"
